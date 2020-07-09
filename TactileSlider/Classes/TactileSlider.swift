@@ -344,8 +344,10 @@ import UIKit
 		
 		if value == minimum && valueChange < 0 {
 			// already hit minimum, don't change the value
+            sendActions(for: .valueChanged)
 		} else if value == maximum && valueChange > 0 {
 			// already hit maximum, don't change the value
+            sendActions(for: .valueChanged)
 		} else {
 			
 			let newValue = value + valueChange
@@ -379,7 +381,7 @@ import UIKit
 			}
 			sender.setTranslation(CGPoint(x: remainingTranslationAmount, y: remainingTranslationAmount), in: self)
 			
-			if isContinuous || sender.state == .ended || sender.state == .cancelled {
+			if isContinuous || sender.state == .ended || sender.state == .cancelled || ((sender.state == .changed) && (self.value == self.maximum || self.value == self.minimum)) {
 				sendActions(for: .valueChanged)
 			}
 			
