@@ -285,7 +285,7 @@ import UIKit
 	/// - Parameter animated: whether or not to perform an asynchronous visual animation of the slider transitioning to the new value
 	///
 	/// - Postcondition: If the value passed in is greater than `minimum` and less than `maximum`, the `value` of the slider will be set to that value, otherwise it will be capped to within that range.
-	open func setValue(_ newValue: Float, animated: Bool) {
+	@objc open func setValue(_ newValue: Float, animated: Bool) {
 		value = min(maximum, max(minimum, newValue))
 		renderer.setValue(value, animated: animated)
 	}
