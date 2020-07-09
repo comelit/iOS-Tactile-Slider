@@ -163,6 +163,19 @@ import UIKit
 			}
 		}
 	}
+    
+    /// The border color of the slider
+    @IBInspectable open var borderColor: UIColor? {
+        get {
+            if let color = renderer.trackLayer.borderColor {
+                return UIColor(cgColor: color)
+            }
+            return nil
+        }
+        set {
+            renderer.trackLayer.backgroundColor = newValue?.cgColor
+        }
+    }
 	
 	override open var frame: CGRect {
 		didSet {
