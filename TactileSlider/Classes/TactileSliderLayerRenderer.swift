@@ -59,8 +59,11 @@ internal class TactileSliderLayerRenderer {
 	private func updateThumbLayerPath() {
 		CATransaction.begin()
 		CATransaction.setDisableActions(true)
-		
-		thumbLayer.path = CGPath(rect: CGRect(x: 0, y: 0, width: thumbLayer.bounds.width, height: thumbLayer.bounds.height), transform: nil)
+        
+        
+        let thumbRect = CGRect(x: 0, y: 0, width: thumbLayer.bounds.width, height: thumbLayer.bounds.height)
+        let thumbPath = UIBezierPath(roundedRect: thumbRect, cornerRadius: cornerRadius)
+        thumbLayer.path = thumbPath.cgPath
 		
 		CATransaction.commit()
 	}
