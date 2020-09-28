@@ -189,7 +189,19 @@ import UIKit
 			tintAdjustmentMode = isEnabled ? .automatic : .dimmed
 		}
 	}
-	
+    
+    private var _feedbackSpan: Float?
+
+    /// Feedback span: span between current value and next value before giving haptic feedback
+    @objc open var feedbackSpan: Float {
+        get {
+            return _feedbackSpan ?? 0
+        }
+        set(newValue) {
+            _feedbackSpan = newValue
+        }
+    }
+
 	// MARK: - Private properties
 	
 	private var direction: Direction {
@@ -236,7 +248,7 @@ import UIKit
 	/// - Important: Only available on iOS 10.0 or later
 	///
 	/// - Note: Defaults to `.light` if not set
-	@available(iOS 10.0, *) open var feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle {
+	@objc @available(iOS 10.0, *) open var feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle {
 		get {
 			guard let _feedbackStyle = _feedbackStyle,
 				let style = UIImpactFeedbackGenerator.FeedbackStyle(rawValue: _feedbackStyle) else { return .light }
@@ -364,7 +376,6 @@ import UIKit
 		} else {
 			
 			let newValue = value + valueChange
-			setValue(newValue, animated: false)
 			
 			// control feedback generator according to state
 			if #available(iOS 10.0, *) {
@@ -373,7 +384,7 @@ import UIKit
 					minMaxFeedbackGenerator = UIImpactFeedbackGenerator(style: feedbackStyle)
 					minMaxFeedbackGenerator?.prepare()
 				case .changed:
-					if newValue != value {
+                    if (newValue != value && Int(newValue) % Int(feedbackSpan) == 0) {
 						minMaxFeedbackGenerator?.impactOccurred()
 						minMaxFeedbackGenerator?.prepare()
 					}
@@ -383,6 +394,8 @@ import UIKit
 					break
 				}
 			}
+            
+            setValue(newValue, animated: false)
 			
 			let remainingTranslationAmount: CGFloat
 			if value == newValue {
